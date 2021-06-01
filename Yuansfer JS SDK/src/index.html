@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="https://mapi.yuansfer.yunkeguan.com/online/v3/secure-pay">
+        <div id="input">
+            Amount: <input type="text" id="amount">
+            Currency: <input type="text" id="currency">
+            Settle Currency: <input type="text" id="settleCurrency">
+            vendor: <input type="text" id="vendor">
+            ipnUrl: <input type="text" id="ipnUrl">
+            callbackUrl: <input type="text" id="callbackUrl">
+            terminal: <input type="text" id="terminal">
+            reference: <input type="text" id="reference">
+            goodsInfo: <input type="text" id="goodsInfo">
+            <input type="button" id="submit" value="Submit" onclick="initVars();">
+        </div>
+    </form>
+</body>
+
+<script src="/dist/Yuansfer-js-sdk.js"></script>
+<script>
+    var Amount;
+    var currrency;
+    var settleCurrency;
+    var vendor;
+    var ipnUrl;
+    var callbackUrl;
+    var terminal;
+    var reference;
+    var response;
+
+    function initVars(){
+        amount = document.getElementById("amount").value;
+        currency = document.getElementById("currency").value;
+        settleCurrency = document.getElementById("settleCurrency").value;
+        vendor = document.getElementById("vendor").value;
+        ipnUrl = document.getElementById("ipnUrl").value;
+        callbackUrl = document.getElementById("callbackUrl").value;
+        terminal = document.getElementById("terminal").value;
+        reference = document.getElementById("reference").value;
+
+        Yuansfer.init({
+            merchantNo: '200043',       //Required
+            storeNo: '302533',          //Required
+            token: 'fe88eefa83f9818645c021454ff14c91',        //Required
+            isvFlag: '0',            //Required 1：Service provider； 0：Merchant
+            merGroupNo: '',      //If isvFlag = 1, it is required
+            env: 'test' // Optional, Possible value: prod or test 
+        })
+        Yuansfer.securePay({
+            amount: amount,      //	String  The price amount
+            currency: currency,  //	String  The price currency, possible values: USD,CNY
+            settleCurrency: settleCurrency,    //	String  The settlement currency, possible values:USD
+            vendor: vendor,                //required  enum	Payment channel include: "alipay", "wechatpay", "unionpay", "creditcard".
+            ipnUrl: ipnUrl,                //required  string	Asynchronous notification url address
+            callbackUrl: callbackUrl,      //required  string	Synchronous callback url address。Synchronous callback address supports                                                           macro replacement rules xxxcallback_url?trans_no={amount}&amount=                                                               {amount}, Yuansfer will replace{} content.
+            terminal: terminal,            //required  enum	Client type include: "ONLINE", "WAP".         //required  string	Merchant system payment reference number, unique                                                             it is when the callback is made, and special characters are not                                                                 supported                                          "ANDROID"
+            reference: reference,       //required  string	Order goods，JSON format，special characters are not supported, such as:                                                         [{"goods_name":"name1","quantity":"quantity1"},                                                                                 {"goods_name":"name2","quantity":"quantity2"}]            
+            success: function(res) {     //Success callback     Use when broswer does not support promise
+            },
+            error: function(res) {        //Failure callback
+            }
+            }).then(res => {         //Success callback      Browser support promise
+                location.replace(res["result"]["cashierUrl"] + '.com');
+            }).catch(res => {        //Failure callback
+        })
+
+    }
+
+</script>
+
+<style>
+    #input{
+        display:grid;
+        gap:10px;
+        grid-template-columns: repeat(4, 1fr);
+        align-items:start;
+        margin:0 auto;
+        width:600px;
+    }
+</style>
+</html>

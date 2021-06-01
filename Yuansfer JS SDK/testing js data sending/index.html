@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        amount: <input type="text" id="amount">
+        currency: <input type="text" id="currency">
+        <input type="button" id="submit" value="Submit" onclick="data();">
+    </form>
+    <script>
+        var amount;
+        var currency;
+
+        function data(){
+            amount = document.getElementById("amount").value;
+            currency = document.getElementById("currency").value;
+            console.log("The amount: " + amount);
+            console.log("The currency: " + currency);
+        }
+    </script>
+</body>
+</html>
